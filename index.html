@@ -132,13 +132,13 @@ function acaPresentationFrame(width,height){
  const home=document.body.classList.contains('presentationHome'),client=$('aca-app')?.classList.contains('a-client');
  let left=24,right=24,top=24,bottom=24;
  if(home&&!client){
-  const host=$('viewer').getBoundingClientRect();
+  // Layout offsets ignore the entrance animation's temporary translation.
   for(const [selector,edge] of [['.a-side','left'],['.a-info','right'],['.a-bottom','bottom']]){
    const el=document.querySelector('#aca-app '+selector);if(!el||el.hidden)continue;
-   const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;
-   if(edge==='left')left=Math.max(left,r.right-host.left+18);
-   if(edge==='right')right=Math.max(right,host.right-r.left+18);
-   if(edge==='bottom')bottom=Math.max(bottom,host.bottom-r.top+30);
+   if(!el.offsetWidth||!el.offsetHeight)continue;
+   if(edge==='left')left=Math.max(left,el.offsetLeft+el.offsetWidth+18);
+   if(edge==='right')right=Math.max(right,width-el.offsetLeft+18);
+   if(edge==='bottom')bottom=Math.max(bottom,height-el.offsetTop+30);
   }
  }
  // On narrow phones the toolbars cannot consume the entire model area.
